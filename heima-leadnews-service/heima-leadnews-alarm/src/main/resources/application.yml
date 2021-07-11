@@ -1,0 +1,17 @@
+server:
+  port: 9010
+spring:
+  mail:
+    host: smtp.163.com #发件服务器地址
+    username: itheima2020@163.com #发件账号
+    password: AWUJNNGRDCEKLUTN #对应账号的授权码
+    port: 25
+
+  #配置邮件接收人
+  application:
+    name: leadnews-alarm
+skywalking:
+  alarm:
+    from: itheima2020@163.com # 发送邮件的地址，和上面username一致
+    receiveEmails:
+    - 380957580@qq.com

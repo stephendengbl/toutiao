@@ -1,0 +1,59 @@
+server:
+  port: 9003
+spring:
+  application:
+    name: leadnews-article
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://192.168.85.143:3306/leadnews_article?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&useSSL=false
+    username: root
+    password: root
+    type: com.alibaba.druid.pool.DruidDataSource
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.85.143:8848
+    stream:
+      kafka:
+        streams:
+          binder:
+            application-id: ${spring.application.name}-kafka-id
+            brokers: 192.168.85.143:9092
+  kafka:
+    bootstrap-servers: 192.168.85.143:9092
+    consumer:
+      group-id: ${spring.application.name}-kafka-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  elasticsearch:
+    rest:
+      uris: 192.168.85.143:9200
+  redis:
+    host: 192.168.85.143
+mybatis-plus:
+  # 设置Mapper接口所对应的XML文件位置，如果你在Mapper接口中有自定义方法，需要进行该配置
+  mapper-locations: classpath*:mapper/*.xml
+  # 设置别名包扫描路径，通过该属性可以给包中的类注册别名
+  type-aliases-package: com.heima.article.entity
+  configuration:
+    # sql输出到控制台,方便开发调试
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+seata:
+  enabled: true
+  service:
+    disable-global-transaction: false
+    grouplist:
+    - 192.168.85.143:8091
+    vgroup-mapping:
+      leadnews-article_tx_group: default
+  tx-service-group: leadnews-article_tx_group
+topic:
+  upDownTopic: wm_news_up_down_topic
+  hotArticleResultTopic: hot_article_result_topic #结果队列
+xxl:
+  job:
+    admin:
+      addresses: http://192.168.85.143:8080/xxl-job-admin
+    executor:
+      appname: ${spring.application.name}-executor
+      port: 9998
